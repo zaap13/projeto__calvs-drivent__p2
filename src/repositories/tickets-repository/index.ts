@@ -1,5 +1,4 @@
 import { prisma } from '@/config';
-import { Prisma } from '@prisma/client';
 
 async function findAllTypes() {
   return prisma.ticketType.findMany();
@@ -68,6 +67,19 @@ async function findByUserId(userId: number) {
   return ticket;
 }
 
+const findTicketById = async (id: number) => {
+  try {
+    const ticket = await prisma.ticket.findFirst({
+      where: {
+        id,
+      },
+    });
+    return ticket;
+  } catch (err) {
+    throw new Error(`Failed to find ticket by id: ${id}. Error: ${err}`);
+  }
+};
+
 const ticketRepository = {
   findAllTypes,
   findByEnrollmentId,
@@ -75,6 +87,7 @@ const ticketRepository = {
   findByUserId,
   findEnrollmentByUserId,
   findTicketTypeById,
+  findTicketById,
 };
 
 export default ticketRepository;

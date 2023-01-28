@@ -1,5 +1,5 @@
-import { prisma } from "@/config";
-import { Enrollment } from "@prisma/client";
+import { prisma } from '@/config';
+import { Enrollment } from '@prisma/client';
 
 async function findWithAddressByUserId(userId: number) {
   return prisma.enrollment.findFirst({
@@ -24,12 +24,26 @@ async function upsert(
   });
 }
 
-export type CreateEnrollmentParams = Omit<Enrollment, "id" | "createdAt" | "updatedAt">;
-export type UpdateEnrollmentParams = Omit<CreateEnrollmentParams, "userId">;
+export type CreateEnrollmentParams = Omit<Enrollment, 'id' | 'createdAt' | 'updatedAt'>;
+export type UpdateEnrollmentParams = Omit<CreateEnrollmentParams, 'userId'>;
+
+const findEnrollmentById = async (id: number) => {
+  try {
+    const enrollment = await prisma.enrollment.findFirst({
+      where: {
+        id,
+      },
+    });
+    return enrollment;
+  } catch (err) {
+    throw new Error(`Failed to find enrollment by id: ${id}. Error: ${err}`);
+  }
+};
 
 const enrollmentRepository = {
   findWithAddressByUserId,
   upsert,
+  findEnrollmentById,
 };
 
 export default enrollmentRepository;
