@@ -10,4 +10,12 @@ async function getTicketTypes(req: Request, res: Response) {
   }
 }
 
+
+
 export { getTicketTypes };
+
+
+
+
+
+
